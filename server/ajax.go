@@ -7,16 +7,17 @@ import (
 
 //Lista elements
 type Lista struct {
-	Name     string   //`json:"name"`
-	Elements []string //`json:"elements"`
+	Name     string //`json:"name"`
+	Elements []int  //`json:"elements"`
 }
 
 func darMensaje(w http.ResponseWriter, r *http.Request) {
-	arreglo := Lista{"results", []string{"one", "two", "three"}}
+	arreglo := Lista{"results", []int{25, 44, 33}}
 	//arreglojson, _ := json.Marshal(arreglo)
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	//w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 	//w.Write(arreglojson)
+
 	json.NewEncoder(w).Encode(arreglo)
 	//fmt.Printf("%s", r)
 	//fmt.Printf(string(value))

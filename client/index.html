@@ -11,7 +11,7 @@
           <button onclick="mostrar('nojson.txt')">pikale aki</button>
           <button onclick="mostrar('otrotxt.txt')">otro boton</button>
           <button onclick="mostrar('sijson.json')">json boton</button>
-          <button onclick="fetch('http://localhost:8080')">call server</button>
+          <button onclick="getGoAnswer()">call server</button>
         </div>
         
         <div id="lugardetrabajo">
@@ -26,62 +26,23 @@
 
 		  <script type="text/javascript">
 
-      const myRequest = new Request('http://localhost:8080');
-
-      const myURL = myRequest.url; // http://localhost/api
-      const myMethod = myRequest.method; // POST
-      const myCred = myRequest.credentials; // omit
-      const bodyUsed = myRequest.bodyUsed; // true
-
-
-      fetch("http://localhost:8080")
-        .then(response => {
-          if (response.status === 200) {
-            console.log(response.json);
-            return response;
-          } else {
-            throw new Error('Something went wrong on api server!');
-          }
-        })
-        .then(response => {
-          document.getElementById("lugardetrabajo").innerHTML= response.json;
-          console.debug(response);
-          // ...
-        }).catch(error => {
-          console.error(error);
-        });
-      /*function callgoserver(){
-        if (window.XMLHttpRequest)
-          {
-            xmlhttp=new Request('http://localhost:8080');
-            //xmlhttp=new XMLHttpRequest();
-          }
-        else
-          {
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-          }
-
-
-
-        xmlhttp.onreadystatechange=function()
-          {
-          
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-            //if(nombre!="sijson.json")
-            document.getElementById("lugardetrabajo").innerHTML=xmlhttp.responseText;
-           // else{
-            //let jsn = JSON.parse(xmlhttp.responseText);
-            //document.getElementById("lugardetrabajo").innerHTML= jsn.segundo;
+      function getGoAnswer(){
+        fetch("http://localhost:8080")
+          .then(response => {
+            if (response.status === 200) {
+              //console.log(response.json);
+              return response.json();
+            } else {
+              throw new Error('Something went wrong on api server!');
             }
-            
-
-
-          }
-
-          xmlhttp.open("GET",nombre,true);
-          xmlhttp.send();
-      }*/
+          })
+          .then(data => {
+            document.getElementById("lugardetrabajo").innerHTML= data.Elements;
+          }).catch(error => {
+            console.error(error);
+          });
+        
+      }
 
       function mostrar(nombre)
       {

@@ -1,0 +1,123 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Semestre i</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+  </head>
+  	<body>
+        <div id="botones">
+          <button onclick="mostrar('nojson.txt')">pikale aki</button>
+          <button onclick="mostrar('otrotxt.txt')">otro boton</button>
+          <button onclick="mostrar('sijson.json')">json boton</button>
+          <button onclick="fetch('http://localhost:8080')">call server</button>
+        </div>
+        
+        <div id="lugardetrabajo">
+           
+        </div>
+
+
+
+    	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+		  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+		  <script type="text/javascript">
+
+      const myRequest = new Request('http://localhost:8080');
+
+      const myURL = myRequest.url; // http://localhost/api
+      const myMethod = myRequest.method; // POST
+      const myCred = myRequest.credentials; // omit
+      const bodyUsed = myRequest.bodyUsed; // true
+
+
+      fetch("http://localhost:8080")
+        .then(response => {
+          if (response.status === 200) {
+            console.log(response.json);
+            return response;
+          } else {
+            throw new Error('Something went wrong on api server!');
+          }
+        })
+        .then(response => {
+          document.getElementById("lugardetrabajo").innerHTML= response.json;
+          console.debug(response);
+          // ...
+        }).catch(error => {
+          console.error(error);
+        });
+      /*function callgoserver(){
+        if (window.XMLHttpRequest)
+          {
+            xmlhttp=new Request('http://localhost:8080');
+            //xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+
+
+
+        xmlhttp.onreadystatechange=function()
+          {
+          
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+            //if(nombre!="sijson.json")
+            document.getElementById("lugardetrabajo").innerHTML=xmlhttp.responseText;
+           // else{
+            //let jsn = JSON.parse(xmlhttp.responseText);
+            //document.getElementById("lugardetrabajo").innerHTML= jsn.segundo;
+            }
+            
+
+
+          }
+
+          xmlhttp.open("GET",nombre,true);
+          xmlhttp.send();
+      }*/
+
+      function mostrar(nombre)
+      {
+
+        if (window.XMLHttpRequest)
+          {
+            xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+
+
+
+        xmlhttp.onreadystatechange=function()
+          {
+          
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+            if(nombre!="sijson.json")
+              document.getElementById("lugardetrabajo").innerHTML=xmlhttp.responseText;
+            else{
+              let jsn = JSON.parse(xmlhttp.responseText);
+              document.getElementById("lugardetrabajo").innerHTML= jsn.segundo;
+            }
+            }
+
+
+          }
+
+          xmlhttp.open("GET",nombre,true);
+          xmlhttp.send();
+      }
+      //mostrar();
+
+      </script>
+	</body>
+</html>

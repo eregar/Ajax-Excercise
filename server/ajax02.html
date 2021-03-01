@@ -1,0 +1,182 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Semestre i</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <style>
+
+		#lugardetrabajo{
+			display:flex;
+    		flex-direction: column-reverse;
+			font-style: italic;
+			background-color: aquamarine;
+		}
+		#espacio1,#espacio{
+			display: flex;
+			background-color: aqua;
+		}
+		#botones{
+			background-color: aqua;
+		}
+		button{
+			color: white;
+			background-color: blue;
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+			min-height: 60px;
+			border-color: blue;
+			border-width: 20px;
+		}
+		body{
+			background-color:aquamarine;
+		}
+    </style>
+
+  </head>
+  	<body>
+        <div id="lugardetrabajo"> </div>
+
+        <div id="espacio">
+           espacioo
+        </div>
+        <div id="espacio1">
+           <p>1</p>
+           <p>2</p>
+           <p>3</p>
+           <p>4</p>
+        </div>
+        <div id="botones">
+          <button onclick="getArreglo()">get</button>
+          <button onclick="postArreglo()">post</button>
+		  <button onclick="refreshArreglo()">refresh</button>
+        </div>
+
+    	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+		<script type="text/javascript">
+
+		let xmlhttp;
+		let data;
+
+		function displayData(){
+
+
+			let datastr = "";
+			for (let i =0;i< data.lista.length;i++){
+				datastr+= "<p>" +data.lista[i] + "</p>";
+			}
+			return datastr;
+		}
+
+      	function getArreglo(){
+        	if (window.XMLHttpRequest){
+            	xmlhttp=new XMLHttpRequest();
+          	}
+        	else{
+          		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          	}
+        	xmlhttp.onreadystatechange=function(){
+          		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+					data = JSON.parse(xmlhttp.responseText);
+            		document.getElementById("lugardetrabajo").innerHTML=displayData();
+                	console.log(xmlhttp.responseText);
+             		//JSON.parse(xmlhttp.responseText)
+            	}
+          	}
+            xmlhttp.open("GET","/array",true);
+
+          	xmlhttp.send();
+      	}
+
+        function postArreglo(){
+        	if (window.XMLHttpRequest){
+            		xmlhttp=new XMLHttpRequest();
+          	}
+        	else{
+          		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          	}
+        	xmlhttp.onreadystatechange=function(){
+          		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+            		document.getElementById("lugardetrabajo").innerHTML=xmlhttp.responseText;
+                	console.log(xmlhttp.responseText);
+                	//JSON.parse(xmlhttp.responseText)
+            	}
+          	}
+            var cadena="/array"
+          	xmlhttp.open("POST",cadena,true);
+            //   xmlhttp.open("GET","/dato",true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("y=3&n=2");
+          	  //xmlhttp.send();
+        }
+		
+		function refreshArreglo(){
+			if (window.XMLHttpRequest){
+            		xmlhttp=new XMLHttpRequest();
+          	}
+        	else{
+          		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          	}
+        	xmlhttp.onreadystatechange=function(){
+          		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+					if(xmlhttp.responseText==""){
+						document.getElementById("lugardetrabajo").innerHTML=displayData();
+						return;
+					}
+					newdata = JSON.parse(xmlhttp.responseText);
+					try {
+						for(i=0;i<newdata.lista.length;i++){
+							data.lista.push(newdata.lista[i]);
+						}
+					} catch (error) {
+						data = newdata;
+						document.getElementById("lugardetrabajo").innerHTML=displayData();
+						return;
+					}
+            		document.getElementById("lugardetrabajo").innerHTML=displayData();
+                	console.log(xmlhttp.responseText);
+                	//JSON.parse(xmlhttp.responseText)
+            	}
+          	}
+            var cadena="/refresh"
+          	xmlhttp.open("POST",cadena,true);
+            //   xmlhttp.open("GET","/dato",true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			try{
+				xmlhttp.send("len="+data.lista.length);
+			}catch(error){
+				xmlhttp.send("len=0");
+			}
+            
+          	  //xmlhttp.send();
+		}
+
+        function mostrar(){
+        	if (window.XMLHttpRequest){
+            		xmlhttp=new XMLHttpRequest();
+          	}
+        	else{
+          		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          	}
+        	xmlhttp.onreadystatechange=function(){
+          		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+            		document.getElementById("lugardetrabajo").innerHTML=xmlhttp.responseText;
+                	console.log(xmlhttp.responseText);
+            	}
+          	}
+            var cadena="/dato"
+          	xmlhttp.open("POST",cadena,true);
+            //   xmlhttp.open("GET","/dato",true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("y=3");
+          	  //xmlhttp.send();
+        }
+
+      	document.getElementById("espacio").addEventListener("click",mostrar);
+
+
+        </script>
+	</body>
+</html>

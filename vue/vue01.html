@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Vue Semestre i</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+   
+    <style>
+
+    
+
+    </style>
+
+  </head>
+  	<body>
+        <div id="lugardetrabajo">
+        {{nombre}}
+        <div class="ui form">
+            <div class="field">
+                <label>Autor</label>
+                <input type="text" v-model="newAutor">
+              </br>
+                <label>Titulo</label>
+                <input type="text" v-model="newTitulo">
+              </br>
+                <label>Cantidad </label>
+                <input type="number" v-model="newCantidad">
+              </br>
+                <label>Editorial</label>
+                <input type="text" v-model="newEditorial">
+              </br>
+                <label>En oferta</label>
+                <input type="checkbox" v-model="newOferta">
+            </div>
+        </div>
+        <button class="ui button" v-on:click="metodo">
+            Agregar libro
+        </button>
+
+        <div v-bind:style="{ color: colorcito}">
+        <ul>
+            <li v-for="book in libros">
+                {{book.titulo}}, por {{book.autor}} ||
+                <span v-if="book.oferta" >
+                    <a href="https://www.youtube.com/watch?v=6E5m_XtCX3c" style="color: red; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                        EN OFERTA!!!!!!!!!!!!1!!!!!!!!!1!!!!!!!!11!!!!!</a>
+                </span>
+                <span v-else style="color: blue;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                    No hay oferta :(
+                </span>
+            </li>
+        </ul>
+        </div>
+
+        {{libros[0].autor}}
+        </div>
+
+        <div id="espacio">
+           espacio
+        </div>
+        
+
+
+		  <script type="text/javascript">
+
+          //Una instancia de Vue que manejará esa área del documento #lugardetrabajo
+          c= new Vue({
+            el: "#lugardetrabajo",
+            data :{
+              nombre: "La elegante vagancia",
+              libros:[
+                {
+                autor:"Ray Bradbury",
+                titulo:"Fahrenheit 451",
+                cantidad:1,
+                editorial:"Editorial de mexico",
+                oferta: true
+                },
+                {
+                autor:"Arthur C. Clarke",
+                titulo:"El fin de la infancia",
+                cantidad:1,
+                editorial:"Editorial de mexico",
+                oferta: false
+                },
+                {
+                autor:"Diosito",
+                titulo:"La biblia",
+                cantidad:1,
+                editorial:"Editorial de mexico",
+                oferta: true
+                }
+              ],
+              newAutor: "",
+              newTitulo: "",
+              newCantidad: 0,
+              newEditorial: "",
+              newOferta: false,
+              colorcito: "blue"
+            },
+            methods:{
+                metodo :function() {
+                    this.newCantidad=parseInt(this.newCantidad);
+                    this.libros.push({autor: this.newAutor,titulo: this.newTitulo, 
+                    cantidad: this.newCantidad, editorial: this.newEditorial, oferta: this.newOferta
+                    });
+                    this.newAutor="";
+                    this.newTitulo="";
+                    this.newCantidad=0;
+                    this.newEditorial="";
+                    this.newOferta=false;
+                }
+            }    
+          });
+
+		  </script>
+	</body>
+</html>

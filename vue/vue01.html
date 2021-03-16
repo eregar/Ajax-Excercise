@@ -3,17 +3,16 @@
     <meta charset="utf-8">
     <title>Vue Semestre i</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
    
     <style>
-
-    
-
     </style>
 
   </head>
   	<body>
-        <div id="lugardetrabajo">
+        <div id="lugardetrabajo" style="background-color: orange;">
         {{nombre}}
+        <h1 id="libreria">Libreria abre mañana!!!!</h1>
         <div class="ui form">
             <div class="field">
                 <label>Autor</label>
@@ -22,13 +21,13 @@
                 <label>Titulo</label>
                 <input type="text" v-model="newTitulo">
               </br>
-                <label>Cantidad </label>
+                <label>Likes </label>
                 <input type="number" v-model="newCantidad">
               </br>
-                <label>Editorial</label>
+                <label>Link</label>
                 <input type="text" v-model="newEditorial">
               </br>
-                <label>En oferta</label>
+                <label>Link disponible</label>
                 <input type="checkbox" v-model="newOferta">
             </div>
         </div>
@@ -38,20 +37,47 @@
 
         <div v-bind:style="{ color: colorcito}">
         <ul>
-            <li v-for="book in libros">
+            <li v-for="(book,i) in ordenarLibros">
                 {{book.titulo}}, por {{book.autor}} ||
                 <span v-if="book.oferta" >
-                    <a href="https://www.youtube.com/watch?v=6E5m_XtCX3c" style="color: red; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
-                        EN OFERTA!!!!!!!!!!!!1!!!!!!!!!1!!!!!!!!11!!!!!</a>
+                    <a v-bind:href="book.editorial" style="color: red; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                        Link disponible!!!!!!</a>
                 </span>
                 <span v-else style="color: blue;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
-                    No hay oferta :(
+                    No hay link :(
                 </span>
+                <button class="ui button" v-on:click="deletear(i)">
+                    delete
+                </button>
+                <button class="ui button" v-on:click="editar(i)">
+                  edit
+                </button>
+                <div v-if="edito == i">
+                  <div class="ui form">
+                    <div class="field">
+                        <label>Autor</label>
+                        <input type="text" v-model="eAutor">
+                      </br>
+                        <label>Titulo</label>
+                        <input type="text" v-model="eTitulo">
+                      </br>
+                        <label>Likes </label>
+                        <input type="number" v-model="eCantidad">
+                      </br>
+                        <label>Link</label>
+                        <input type="text" v-model="eEditorial">
+                      </br>
+                        <label>Link Disponible</label>
+                        <input type="checkbox" v-model="eOferta">
+                    </div>
+                </div>
+                <button class="ui button" v-on:click="stopedit(i)">
+                    Finish
+                </button>
+                </div>
             </li>
         </ul>
         </div>
-
-        {{libros[0].autor}}
         </div>
 
         <div id="espacio">
@@ -67,26 +93,14 @@
             el: "#lugardetrabajo",
             data :{
               nombre: "La elegante vagancia",
+              open: false,
+              openTomorrow: true,
               libros:[
                 {
-                autor:"Ray Bradbury",
-                titulo:"Fahrenheit 451",
-                cantidad:1,
-                editorial:"Editorial de mexico",
-                oferta: true
-                },
-                {
-                autor:"Arthur C. Clarke",
-                titulo:"El fin de la infancia",
-                cantidad:1,
-                editorial:"Editorial de mexico",
-                oferta: false
-                },
-                {
-                autor:"Diosito",
-                titulo:"La biblia",
-                cantidad:1,
-                editorial:"Editorial de mexico",
+                autor:"Pink Fong",
+                titulo:"Baby Shark tutururuturu",
+                cantidad:3,
+                editorial:"https://www.youtube.com/watch?v=XqZsoesa55w",
                 oferta: true
                 }
               ],
@@ -95,7 +109,23 @@
               newCantidad: 0,
               newEditorial: "",
               newOferta: false,
-              colorcito: "blue"
+              eAutor: "",
+              eTitulo: "",
+              eCantidad: 0,
+              eEditorial: "",
+              eOferta: false,
+              colorcito: "blue",
+              edito: -1
+            },
+            created: function(){
+              fetch("/dato")
+              .then(response => response.json())
+              .then(data=> {
+                for(let i=0;i<data.data.length;i++){
+                  this.libros.push(data.data[i]);
+                }
+                
+              });
             },
             methods:{
                 metodo :function() {
@@ -108,8 +138,61 @@
                     this.newCantidad=0;
                     this.newEditorial="";
                     this.newOferta=false;
+                    
+                    
+                },
+                deletear(i){
+                  this.libros.splice(i,1);
+                },
+                editar(i){
+                  this.edito=i;
+                  this.eAutor= this.libros[i].autor;
+                  this.eTitulo= this.libros[i].titulo;
+                  this.eCantidad= this.libros[i].cantidad;
+                  this.eEditorial= this.libros[i].editorial;
+                  this.eOferta= this.libros[i].oferta;
+                },
+                stopedit(i){
+                  this.libros[i].autor = this.eAutor;
+                  this.libros[i].titulo =this.eTitulo;
+                  this.libros[i].cantidad = this.eCantidad;
+                  this.libros[i].editorial = this.eEditorial;
+                  this.libros[i].oferta = this.eOferta;
+                  this.edito=-1;
+                  this.eAutor= "";
+                  this.eTitulo= "";
+                  this.eCantidad= 0;
+                  this.eEditorial= "";
+                  this.eOferta= false;
                 }
-            }    
+            },
+            computed:{
+              ordenarLibros: function(){
+                console.log("computed");
+                this.libros = _.orderBy(this.libros,['cantidad']);
+                return this.libros;
+              }
+            },
+            watch:{
+              nombre: function(d){
+                console.log("algo ha cambiado");
+              },
+              open: function(d){
+                if(d){
+                  document.getElementById("lugardetrabajo").style.backgroundColor="greenyellow";
+                }else{
+                  document.getElementById("lugardetrabajo").style.backgroundColor="orange";
+                }
+              },
+              openTomorrow: function(d){
+                if(d){
+                  document.getElementById("libreria").innerHTML="Abierto mañana!!!!!!";
+
+                }else{
+                  document.getElementById("libreria").innerHTML="No abre mañana :(";
+                }
+              }
+            }  
           });
 
 		  </script>

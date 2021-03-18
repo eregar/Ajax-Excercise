@@ -4,34 +4,51 @@
     <title>Vue Semestre i</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" integrity="sha512-5fsy+3xG8N/1PV5MIJz9ZsWpkltijBI48gBzQ/Z2eVATePGHOkMIn+xTDHIfTZFVb9GMpflF2wOWItqxAP2oLQ==" crossorigin="anonymous" />   
     <style>
     </style>
 
   </head>
   	<body>
         <div id="lugardetrabajo" style="background-color: orange;">
-        {{nombre}}
+        <div class="row">
+          <div class ="six columns">
+            {{nombre}}
+          </div>
         <h1 id="libreria">Libreria abre mañana!!!!</h1>
+        </div>
         <div class="ui form">
             <div class="field">
+                <div class="row">
+                <div class="four columns">
                 <label>Autor</label>
                 <input type="text" v-model="newAutor">
-              </br>
+                </div>
+                
+                <div class="four columns">
                 <label>Titulo</label>
                 <input type="text" v-model="newTitulo">
-              </br>
+                </div>
+                <div class="four columns">
+
                 <label>Likes </label>
                 <input type="number" v-model="newCantidad">
-              </br>
+                </div>
+              </div>
+              <div class="row">
+                <div class="four columns">
                 <label>Link</label>
                 <input type="text" v-model="newEditorial">
-              </br>
-                <label>Link disponible</label>
+                </div>
+                <div class="six columns">
+                  <label>Link disponible</label>
                 <input type="checkbox" v-model="newOferta">
+                </div>
+              </div>
+                
             </div>
         </div>
-        <button class="ui button" v-on:click="metodo">
+        <button class="ui button button-primary" v-on:click="metodo">
             Agregar libro
         </button>
 
@@ -46,7 +63,7 @@
                 <span v-else style="color: blue;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
                     No hay link :(
                 </span>
-                <button class="ui button" v-on:click="deletear(i)">
+                <button class="ui button button-primary" v-on:click="deletear(i)">
                     delete
                 </button>
                 <button class="ui button" v-on:click="editar(i)">
@@ -78,6 +95,7 @@
             </li>
         </ul>
         </div>
+        
         </div>
 
         <div id="espacio">

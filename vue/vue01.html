@@ -95,7 +95,20 @@
             </li>
         </ul>
         </div>
-        
+          <div id=spotify>
+            <h3>Categories</h3>
+            <ul >
+            <li v-for="(cat,i) in datos_spotify">{{cat}}</li>
+            </ul>
+            <h3>Top listened songs</h3>
+            <ol>
+            <li v-for="(cat,i) in top10">{{cat}}</li>
+            </ol>
+            <h3>Nobel Prize Categories</h3>
+            <ul >
+            <li v-for="(cat,i) in winners">{{cat}}</li>
+            </ul>
+          </div>
         </div>
 
         <div id="espacio">
@@ -122,6 +135,10 @@
                 oferta: true
                 }
               ],
+              spotify: "spotify",
+              datos_spotify: [],
+              top10: [],
+              winners: [],
               newAutor: "",
               newTitulo: "",
               newCantidad: 0,
@@ -144,6 +161,38 @@
                 }
                 
               });
+              fetch("https://api.spotify.com/v1/browse/categories", {method: 'GET',
+              headers : {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '
+              }})
+              .then(response => response.json())
+              .then(data => {
+                for(let i=0;i<data.categories.items.length;i++){
+                  this.datos_spotify.push(data.categories.items[i].name);
+                }
+              });
+              fetch("https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=10&offset=5",{method: 'GET',
+              headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '
+              }
+              })
+              .then(response => response.json())
+              .then(data => {
+                for(let i=0;i<data.items.length;i++){
+                  this.top10.push(data.items[i].name);
+                }
+              });
+
+              fetch("http://api.nobelprize.org/v1/prize.json?year=2020", {method:'GET'})
+              .then(response => response.json())
+              .then(data=> {
+                for(let i=0;i<data.prizes.length;i++){
+                  this.winners.push(data.prizes[i].category);
+                }
+              })
             },
             methods:{
                 metodo :function() {
